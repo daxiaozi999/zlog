@@ -1,10 +1,10 @@
 /**
- * ZLogging ÐÔÄÜ²âÊÔ³ÌÐò
+ * ZLogging æ€§èƒ½æµ‹è¯•ç¨‹åº
  *
- * ³ä·ÖÀûÓÃÈÕÖ¾¿â×Ô´øµÄÐÔÄÜ²âÊÔ¹¦ÄÜ£º
- * - ZLOG_TIMER: ×Ô¶¯¼ÆÊ±Æ÷
- * - ZLOG_TIMER_BEGIN/END: ÊÖ¶¯¼ÆÊ±Æ÷
- * - ÄÚÖÃÍ³¼Æ¹¦ÄÜ
+ * å……åˆ†åˆ©ç”¨æ—¥å¿—åº“è‡ªå¸¦çš„æ€§èƒ½æµ‹è¯•åŠŸèƒ½ï¼š
+ * - ZLOG_TIMER: è‡ªåŠ¨è®¡æ—¶å™¨
+ * - ZLOG_TIMER_BEGIN/END: æ‰‹åŠ¨è®¡æ—¶å™¨
+ * - å†…ç½®ç»Ÿè®¡åŠŸèƒ½
  */
 
 #include "zlogging.h"
@@ -13,280 +13,280 @@
 #include <vector>
 #include <iostream>
 
- // ²âÊÔ²ÎÊý
-const int BASIC_TEST_COUNT = 50000;        // »ù´¡²âÊÔÊýÁ¿
-const int THREAD_COUNT = 2;                // ¼õÉÙµ½2¸öÏß³Ì
-const int PER_THREAD_COUNT = 25000;        // Ã¿Ïß³ÌÈÕÖ¾Êý
+ // æµ‹è¯•å‚æ•°
+const int BASIC_TEST_COUNT = 50000;        // åŸºç¡€æµ‹è¯•æ•°é‡
+const int THREAD_COUNT = 2;                // å‡å°‘åˆ°2ä¸ªçº¿ç¨‹
+const int PER_THREAD_COUNT = 25000;        // æ¯çº¿ç¨‹æ—¥å¿—æ•°
 
 //==============================================================================
-// 1. »ù´¡ÐÔÄÜ²âÊÔ
+// 1. åŸºç¡€æ€§èƒ½æµ‹è¯•
 //==============================================================================
 
 void basicPerformanceTest() {
-    std::cout << "\n=== »ù´¡ÐÔÄÜ²âÊÔ ===" << std::endl;
+    std::cout << "\n=== åŸºç¡€æ€§èƒ½æµ‹è¯• ===" << std::endl;
 
-    // ²âÊÔ1£ºÁ÷Ê½Êä³öÐÔÄÜ
+    // æµ‹è¯•1ï¼šæµå¼è¾“å‡ºæ€§èƒ½
     {
-        ZLOG_TIMER("Á÷Ê½Êä³öÐÔÄÜ²âÊÔ");
+        ZLOG_TIMER("æµå¼è¾“å‡ºæ€§èƒ½æµ‹è¯•");
         for (int i = 0; i < BASIC_TEST_COUNT; ++i) {
-            ZINFO() << "Á÷Ê½Êä³ö²âÊÔÏûÏ¢ " << i << " Êý¾Ý: " << (i * 1.5);
+            ZINFO() << "æµå¼è¾“å‡ºæµ‹è¯•æ¶ˆæ¯ " << i << " æ•°æ®: " << (i * 1.5);
         }
         ZLOG_FLUSH();
-    } // ×Ô¶¯Êä³ö¼ÆÊ±½á¹û
+    } // è‡ªåŠ¨è¾“å‡ºè®¡æ—¶ç»“æžœ
 
-    // ²âÊÔ2£º¸ñÊ½»¯Êä³öÐÔÄÜ
+    // æµ‹è¯•2ï¼šæ ¼å¼åŒ–è¾“å‡ºæ€§èƒ½
     {
-        ZLOG_TIMER("¸ñÊ½»¯Êä³öÐÔÄÜ²âÊÔ");
+        ZLOG_TIMER("æ ¼å¼åŒ–è¾“å‡ºæ€§èƒ½æµ‹è¯•");
         for (int i = 0; i < BASIC_TEST_COUNT; ++i) {
-            ZINFOF("¸ñÊ½»¯²âÊÔ ID:%d, Ë÷Òý:%d, Öµ:%.2f, ×´Ì¬:%s",
+            ZINFOF("æ ¼å¼åŒ–æµ‹è¯• ID:%d, ç´¢å¼•:%d, å€¼:%.2f, çŠ¶æ€:%s",
                 12345, i, i * 2.5, (i % 2) ? "active" : "inactive");
         }
         ZLOG_FLUSH();
     }
 
-    // ²âÊÔ3£º»ìºÏ¼¶±ðÊä³ö
+    // æµ‹è¯•3ï¼šæ··åˆçº§åˆ«è¾“å‡º
     {
-        ZLOG_TIMER("»ìºÏ¼¶±ðÊä³ö²âÊÔ");
+        ZLOG_TIMER("æ··åˆçº§åˆ«è¾“å‡ºæµ‹è¯•");
         for (int i = 0; i < BASIC_TEST_COUNT; ++i) {
             switch (i % 4) {
-            case 0: ZDEBUG() << "µ÷ÊÔÐÅÏ¢ " << i; break;
-            case 1: ZINFO() << "ÆÕÍ¨ÐÅÏ¢ " << i; break;
-            case 2: ZWARNING() << "¾¯¸æÐÅÏ¢ " << i; break;
-            case 3: ZERROR() << "´íÎóÐÅÏ¢ " << i; break;
+            case 0: ZDEBUG() << "è°ƒè¯•ä¿¡æ¯ " << i; break;
+            case 1: ZINFO() << "æ™®é€šä¿¡æ¯ " << i; break;
+            case 2: ZWARNING() << "è­¦å‘Šä¿¡æ¯ " << i; break;
+            case 3: ZERROR() << "é”™è¯¯ä¿¡æ¯ " << i; break;
             }
         }
         ZLOG_FLUSH();
     }
 
-    std::cout << "»ù´¡ÐÔÄÜ²âÊÔÍê³É" << std::endl;
+    std::cout << "åŸºç¡€æ€§èƒ½æµ‹è¯•å®Œæˆ" << std::endl;
 }
 
 //==============================================================================
-// 2. ²»Í¬Êä³öÄ£Ê½ÐÔÄÜ¶Ô±È
+// 2. ä¸åŒè¾“å‡ºæ¨¡å¼æ€§èƒ½å¯¹æ¯”
 //==============================================================================
 
 void outputModePerformanceTest() {
-    std::cout << "\n=== Êä³öÄ£Ê½ÐÔÄÜ¶Ô±È ===" << std::endl;
+    std::cout << "\n=== è¾“å‡ºæ¨¡å¼æ€§èƒ½å¯¹æ¯” ===" << std::endl;
 
     const int modeTestCount = 20000;
 
-    // ½öÎÄ¼þÊä³ö²âÊÔ
+    // ä»…æ–‡ä»¶è¾“å‡ºæµ‹è¯•
     ZLOG_SET_OUTPUT_MODE(ZLOG_FILE_ONLY, false, "");
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     {
-        ZLOG_TIMER("½öÎÄ¼þÊä³öÄ£Ê½");
+        ZLOG_TIMER("ä»…æ–‡ä»¶è¾“å‡ºæ¨¡å¼");
         for (int i = 0; i < modeTestCount; ++i) {
-            ZINFO() << "½öÎÄ¼þÊä³ö²âÊÔ " << i << " Ê±¼ä´Á: " << std::chrono::system_clock::now().time_since_epoch().count();
+            ZINFO() << "ä»…æ–‡ä»¶è¾“å‡ºæµ‹è¯• " << i << " æ—¶é—´æˆ³: " << std::chrono::system_clock::now().time_since_epoch().count();
         }
         ZLOG_FLUSH();
     }
 
-    // ½ö¿ØÖÆÌ¨Êä³ö²âÊÔ
+    // ä»…æŽ§åˆ¶å°è¾“å‡ºæµ‹è¯•
     ZLOG_SET_OUTPUT_MODE(ZLOG_CONSOLE_ONLY, false, "");
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     {
-        ZLOG_TIMER("½ö¿ØÖÆÌ¨Êä³öÄ£Ê½");
+        ZLOG_TIMER("ä»…æŽ§åˆ¶å°è¾“å‡ºæ¨¡å¼");
         for (int i = 0; i < modeTestCount; ++i) {
-            ZINFO() << "½ö¿ØÖÆÌ¨Êä³ö²âÊÔ " << i;
+            ZINFO() << "ä»…æŽ§åˆ¶å°è¾“å‡ºæµ‹è¯• " << i;
         }
         ZLOG_FLUSH();
     }
 
-    // Ë«ÖØÊä³ö²âÊÔ
+    // åŒé‡è¾“å‡ºæµ‹è¯•
     ZLOG_SET_OUTPUT_MODE(ZLOG_BOTH, false, "");
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     {
-        ZLOG_TIMER("¿ØÖÆÌ¨+ÎÄ¼þÊä³öÄ£Ê½");
+        ZLOG_TIMER("æŽ§åˆ¶å°+æ–‡ä»¶è¾“å‡ºæ¨¡å¼");
         for (int i = 0; i < modeTestCount; ++i) {
-            ZINFO() << "Ë«ÖØÊä³ö²âÊÔ " << i;
+            ZINFO() << "åŒé‡è¾“å‡ºæµ‹è¯• " << i;
         }
         ZLOG_FLUSH();
     }
 
-    // »Ö¸´Ä¬ÈÏÄ£Ê½
+    // æ¢å¤é»˜è®¤æ¨¡å¼
     ZLOG_SET_OUTPUT_MODE(ZLOG_DEFAULT_MODE, false, "");
-    std::cout << "Êä³öÄ£Ê½ÐÔÄÜ¶Ô±ÈÍê³É" << std::endl;
+    std::cout << "è¾“å‡ºæ¨¡å¼æ€§èƒ½å¯¹æ¯”å®Œæˆ" << std::endl;
 }
 
 //==============================================================================
-// 3. ¶àÏß³ÌÐÔÄÜ²âÊÔ£¨¼õÉÙÏß³ÌÊý£©
+// 3. å¤šçº¿ç¨‹æ€§èƒ½æµ‹è¯•ï¼ˆå‡å°‘çº¿ç¨‹æ•°ï¼‰
 //==============================================================================
 
 void multiThreadPerformanceTest() {
-    std::cout << "\n=== ¶àÏß³ÌÐÔÄÜ²âÊÔ (" << THREAD_COUNT << "¸öÏß³Ì) ===" << std::endl;
+    std::cout << "\n=== å¤šçº¿ç¨‹æ€§èƒ½æµ‹è¯• (" << THREAD_COUNT << "ä¸ªçº¿ç¨‹) ===" << std::endl;
 
-    ZLOG_TIMER_BEGIN(¶àÏß³Ì×ÜÌå²âÊÔ);
+    ZLOG_TIMER_BEGIN(å¤šçº¿ç¨‹æ€»ä½“æµ‹è¯•);
 
     std::vector<std::thread> threads;
 
-    // ´´½¨²âÊÔÏß³Ì
+    // åˆ›å»ºæµ‹è¯•çº¿ç¨‹
     for (int threadId = 0; threadId < THREAD_COUNT; ++threadId) {
         threads.emplace_back([threadId]() {
-            ZLOG_FUNCTION(); // º¯Êý×÷ÓÃÓò×·×Ù
+            ZLOG_FUNCTION(); // å‡½æ•°ä½œç”¨åŸŸè¿½è¸ª
 
-            // Ã¿¸öÏß³ÌµÄ¼ÆÊ±
-            ZLOG_TIMER("Ïß³Ì" + std::to_string(threadId) + "Ö´ÐÐÊ±¼ä");
+            // æ¯ä¸ªçº¿ç¨‹çš„è®¡æ—¶
+            ZLOG_TIMER("çº¿ç¨‹" + std::to_string(threadId) + "æ‰§è¡Œæ—¶é—´");
 
-            ZINFOF("Ïß³Ì %d ¿ªÊ¼Ö´ÐÐ£¬Ä¿±êÊä³ö %d ÌõÈÕÖ¾", threadId, PER_THREAD_COUNT);
+            ZINFOF("çº¿ç¨‹ %d å¼€å§‹æ‰§è¡Œï¼Œç›®æ ‡è¾“å‡º %d æ¡æ—¥å¿—", threadId, PER_THREAD_COUNT);
 
             for (int i = 0; i < PER_THREAD_COUNT; ++i) {
-                // »ìºÏ²»Í¬ÀàÐÍµÄÈÕÖ¾Êä³ö
+                // æ··åˆä¸åŒç±»åž‹çš„æ—¥å¿—è¾“å‡º
                 if (i % 100 == 0) {
-                    ZINFOF("Ïß³Ì%d ½ø¶È±¨¸æ: %d/%d (%.1f%%)",
+                    ZINFOF("çº¿ç¨‹%d è¿›åº¦æŠ¥å‘Š: %d/%d (%.1f%%)",
                         threadId, i, PER_THREAD_COUNT, (i * 100.0 / PER_THREAD_COUNT));
                 }
 
                 if (i % 3 == 0) {
-                    ZDEBUGF("Ïß³Ì%d µ÷ÊÔÐÅÏ¢ %d", threadId, i);
+                    ZDEBUGF("çº¿ç¨‹%d è°ƒè¯•ä¿¡æ¯ %d", threadId, i);
                 }
                 else if (i % 7 == 0) {
-                    ZWARNINGF("Ïß³Ì%d ¾¯¸æÐÅÏ¢ %d", threadId, i);
+                    ZWARNINGF("çº¿ç¨‹%d è­¦å‘Šä¿¡æ¯ %d", threadId, i);
                 }
                 else {
-                    ZINFO() << "Ïß³Ì" << threadId << " ÆÕÍ¨ÏûÏ¢ " << i
-                        << " Êý¾Ý: " << (i * threadId);
+                    ZINFO() << "çº¿ç¨‹" << threadId << " æ™®é€šæ¶ˆæ¯ " << i
+                        << " æ•°æ®: " << (i * threadId);
                 }
 
-                // Å¼¶ûÌí¼Ó×÷ÓÃÓò²âÊÔ
+                // å¶å°”æ·»åŠ ä½œç”¨åŸŸæµ‹è¯•
                 if (i % 5000 == 0 && i > 0) {
-                    ZLOG_SCOPE("Ïß³Ì" + std::to_string(threadId) + "×ÓÈÎÎñ");
-                    ZDEBUG() << "Ö´ÐÐ×ÓÈÎÎñ " << i;
+                    ZLOG_SCOPE("çº¿ç¨‹" + std::to_string(threadId) + "å­ä»»åŠ¡");
+                    ZDEBUG() << "æ‰§è¡Œå­ä»»åŠ¡ " << i;
                 }
             }
 
-            ZINFOF("Ïß³Ì %d Ö´ÐÐÍê³É", threadId);
+            ZINFOF("çº¿ç¨‹ %d æ‰§è¡Œå®Œæˆ", threadId);
             });
     }
 
-    // µÈ´ýËùÓÐÏß³ÌÍê³É
+    // ç­‰å¾…æ‰€æœ‰çº¿ç¨‹å®Œæˆ
     for (auto& thread : threads) {
         thread.join();
     }
 
-    ZLOG_TIMER_END(¶àÏß³Ì×ÜÌå²âÊÔ);
+    ZLOG_TIMER_END(å¤šçº¿ç¨‹æ€»ä½“æµ‹è¯•);
 
-    // µÈ´ýÒì²½´¦ÀíÍê³É
+    // ç­‰å¾…å¼‚æ­¥å¤„ç†å®Œæˆ
     ZLOG_FLUSH();
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
-    std::cout << "¶àÏß³ÌÐÔÄÜ²âÊÔÍê³É" << std::endl;
+    std::cout << "å¤šçº¿ç¨‹æ€§èƒ½æµ‹è¯•å®Œæˆ" << std::endl;
 }
 
 //==============================================================================
-// 4. ¸´ÔÓ³¡¾°ÐÔÄÜ²âÊÔ
+// 4. å¤æ‚åœºæ™¯æ€§èƒ½æµ‹è¯•
 //==============================================================================
 
 void complexScenarioTest() {
-    std::cout << "\n=== ¸´ÔÓ³¡¾°ÐÔÄÜ²âÊÔ ===" << std::endl;
+    std::cout << "\n=== å¤æ‚åœºæ™¯æ€§èƒ½æµ‹è¯• ===" << std::endl;
 
-    ZLOG_TIMER("¸´ÔÓ³¡¾°×ÜÌå²âÊÔ");
+    ZLOG_TIMER("å¤æ‚åœºæ™¯æ€»ä½“æµ‹è¯•");
 
-    // Ä£ÄâÒµÎñ´¦ÀíÁ÷³Ì
+    // æ¨¡æ‹Ÿä¸šåŠ¡å¤„ç†æµç¨‹
     {
-        ZLOG_SCOPE("ÒµÎñ³õÊ¼»¯½×¶Î");
-        ZINFO() << "¿ªÊ¼ÒµÎñ³õÊ¼»¯";
+        ZLOG_SCOPE("ä¸šåŠ¡åˆå§‹åŒ–é˜¶æ®µ");
+        ZINFO() << "å¼€å§‹ä¸šåŠ¡åˆå§‹åŒ–";
 
         {
-            ZLOG_TIMER("ÅäÖÃ¼ÓÔØ");
+            ZLOG_TIMER("é…ç½®åŠ è½½");
             for (int i = 0; i < 1000; ++i) {
-                ZDEBUGF("¼ÓÔØÅäÖÃÏî %d: key=config_%d, value=%d", i, i, i * 2);
+                ZDEBUGF("åŠ è½½é…ç½®é¡¹ %d: key=config_%d, value=%d", i, i, i * 2);
             }
         }
 
         {
-            ZLOG_TIMER("Êý¾Ý¿âÁ¬½Ó³õÊ¼»¯");
+            ZLOG_TIMER("æ•°æ®åº“è¿žæŽ¥åˆå§‹åŒ–");
             for (int i = 0; i < 500; ++i) {
-                ZINFOF("³õÊ¼»¯Á¬½Ó³Ø %d/500", i + 1);
+                ZINFOF("åˆå§‹åŒ–è¿žæŽ¥æ±  %d/500", i + 1);
             }
         }
 
-        ZINFO() << "ÒµÎñ³õÊ¼»¯Íê³É";
+        ZINFO() << "ä¸šåŠ¡åˆå§‹åŒ–å®Œæˆ";
     }
 
-    // Ä£ÄâÇëÇó´¦Àí
+    // æ¨¡æ‹Ÿè¯·æ±‚å¤„ç†
     {
-        ZLOG_SCOPE("ÇëÇó´¦Àí½×¶Î");
-        ZINFO() << "¿ªÊ¼´¦ÀíÓÃ»§ÇëÇó";
+        ZLOG_SCOPE("è¯·æ±‚å¤„ç†é˜¶æ®µ");
+        ZINFO() << "å¼€å§‹å¤„ç†ç”¨æˆ·è¯·æ±‚";
 
         for (int requestId = 1; requestId <= 1000; ++requestId) {
-            ZLOG_TIMER_BEGIN(ÇëÇó´¦Àí);
+            ZLOG_TIMER_BEGIN(è¯·æ±‚å¤„ç†);
 
-            // Ä£ÄâÇëÇó´¦ÀíÂß¼­
-            ZINFOF("´¦ÀíÇëÇó %d", requestId);
-            ZDEBUGF("ÇëÇó²ÎÊý: userId=%d, action=%s", requestId * 100, "query");
+            // æ¨¡æ‹Ÿè¯·æ±‚å¤„ç†é€»è¾‘
+            ZINFOF("å¤„ç†è¯·æ±‚ %d", requestId);
+            ZDEBUGF("è¯·æ±‚å‚æ•°: userId=%d, action=%s", requestId * 100, "query");
 
-            // Ä£ÄâÒµÎñÂß¼­
+            // æ¨¡æ‹Ÿä¸šåŠ¡é€»è¾‘
             if (requestId % 10 == 0) {
-                ZWARNINGF("ÇëÇó %d ´¦Àí½ÏÂý", requestId);
+                ZWARNINGF("è¯·æ±‚ %d å¤„ç†è¾ƒæ…¢", requestId);
             }
 
             if (requestId % 50 == 0) {
-                ZLOG_SCOPE("Êý¾Ý¿â²Ù×÷");
-                ZDEBUGF("Ö´ÐÐÊý¾Ý¿â²éÑ¯£¬ÇëÇóID: %d", requestId);
+                ZLOG_SCOPE("æ•°æ®åº“æ“ä½œ");
+                ZDEBUGF("æ‰§è¡Œæ•°æ®åº“æŸ¥è¯¢ï¼Œè¯·æ±‚ID: %d", requestId);
             }
 
-            ZLOG_TIMER_END(ÇëÇó´¦Àí);
+            ZLOG_TIMER_END(è¯·æ±‚å¤„ç†);
 
-            // ´íÎóÄ£Äâ
+            // é”™è¯¯æ¨¡æ‹Ÿ
             if (requestId % 100 == 0) {
-                ZERRORF("ÇëÇó %d ´¦ÀíÊ§°Ü£¬´íÎóÂë: %d", requestId, -1001);
+                ZERRORF("è¯·æ±‚ %d å¤„ç†å¤±è´¥ï¼Œé”™è¯¯ç : %d", requestId, -1001);
             }
         }
 
-        ZINFO() << "ÇëÇó´¦Àí½×¶ÎÍê³É";
+        ZINFO() << "è¯·æ±‚å¤„ç†é˜¶æ®µå®Œæˆ";
     }
 
-    // Ä£ÄâÏµÍ³¼à¿Ø
+    // æ¨¡æ‹Ÿç³»ç»Ÿç›‘æŽ§
     {
-        ZLOG_SCOPE("ÏµÍ³¼à¿Ø");
-        ZLOG_TIMER("¼à¿ØÊý¾ÝÊÕ¼¯");
+        ZLOG_SCOPE("ç³»ç»Ÿç›‘æŽ§");
+        ZLOG_TIMER("ç›‘æŽ§æ•°æ®æ”¶é›†");
 
         for (int i = 0; i < 100; ++i) {
-            ZINFOF("ÏµÍ³¼à¿Ø - CPU: %.1f%%, ÄÚ´æ: %.1f%%, ÍøÂç: %d KB/s",
+            ZINFOF("ç³»ç»Ÿç›‘æŽ§ - CPU: %.1f%%, å†…å­˜: %.1f%%, ç½‘ç»œ: %d KB/s",
                 (i % 100) * 0.8, (i % 80) * 1.2, i * 10);
         }
     }
 
-    std::cout << "¸´ÔÓ³¡¾°²âÊÔÍê³É" << std::endl;
+    std::cout << "å¤æ‚åœºæ™¯æµ‹è¯•å®Œæˆ" << std::endl;
 }
 
 //==============================================================================
-// 5. Ñ¹Á¦²âÊÔ£¨ÊÊ¶È£©
+// 5. åŽ‹åŠ›æµ‹è¯•ï¼ˆé€‚åº¦ï¼‰
 //==============================================================================
 
 void stressTest() {
-    std::cout << "\n=== ÊÊ¶ÈÑ¹Á¦²âÊÔ ===" << std::endl;
+    std::cout << "\n=== é€‚åº¦åŽ‹åŠ›æµ‹è¯• ===" << std::endl;
 
-    // ÁÙÊ±µ÷Õû»º´æ´óÐ¡
+    // ä¸´æ—¶è°ƒæ•´ç¼“å­˜å¤§å°
     size_t originalCache = ZLOG_GET_MAX_CACHE_SIZE();
-    ZLOG_SET_MAX_CACHE_SIZE(2000);  // ÉèÖÃ½ÏÐ¡»º´æ¹Û²ìÐÐÎª
+    ZLOG_SET_MAX_CACHE_SIZE(2000);  // è®¾ç½®è¾ƒå°ç¼“å­˜è§‚å¯Ÿè¡Œä¸º
 
-    ZLOG_TIMER("Ñ¹Á¦²âÊÔ");
+    ZLOG_TIMER("åŽ‹åŠ›æµ‹è¯•");
 
-    const int stressCount = 80000;  // ÊÊ¶ÈµÄÑ¹Á¦²âÊÔ
+    const int stressCount = 80000;  // é€‚åº¦çš„åŽ‹åŠ›æµ‹è¯•
 
-    ZINFOF("¿ªÊ¼Ñ¹Á¦²âÊÔ£¬Ä¿±ê: %d ÌõÈÕÖ¾", stressCount);
+    ZINFOF("å¼€å§‹åŽ‹åŠ›æµ‹è¯•ï¼Œç›®æ ‡: %d æ¡æ—¥å¿—", stressCount);
 
     for (int i = 0; i < stressCount; ++i) {
-        // »ìºÏÊä³öÀàÐÍ
+        // æ··åˆè¾“å‡ºç±»åž‹
         if (i % 5 == 0) {
-            ZINFOF("Ñ¹Á¦²âÊÔ %d/%d - ×´Ì¬: %s, Êý¾Ý: %d",
+            ZINFOF("åŽ‹åŠ›æµ‹è¯• %d/%d - çŠ¶æ€: %s, æ•°æ®: %d",
                 i, stressCount, (i % 2) ? "processing" : "waiting", i * 3);
         }
         else {
-            ZDEBUG() << "Ñ¹Á¦²âÊÔµ÷ÊÔÐÅÏ¢ " << i << " ¼ÆËã½á¹û: " << (i * i % 1000);
+            ZDEBUG() << "åŽ‹åŠ›æµ‹è¯•è°ƒè¯•ä¿¡æ¯ " << i << " è®¡ç®—ç»“æžœ: " << (i * i % 1000);
         }
 
-        // ¶¨ÆÚ¼ì²éÏµÍ³×´Ì¬
+        // å®šæœŸæ£€æŸ¥ç³»ç»ŸçŠ¶æ€
         if (i % 10000 == 0 && i > 0) {
             size_t queueSize = ZLOG_GET_QUEUE_SIZE();
             size_t droppedCount = ZLOG_GET_DROPPED_COUNT();
 
-            ZINFOF("Ñ¹Á¦²âÊÔ½ø¶È: %d/%d, ¶ÓÁÐ: %zu, ¶ªÆú: %zu",
+            ZINFOF("åŽ‹åŠ›æµ‹è¯•è¿›åº¦: %d/%d, é˜Ÿåˆ—: %zu, ä¸¢å¼ƒ: %zu",
                 i, stressCount, queueSize, droppedCount);
 
             if (droppedCount > 0) {
-                ZWARNINGF("¼ì²âµ½ÏûÏ¢¶ªÆú: %zu Ìõ", droppedCount);
+                ZWARNINGF("æ£€æµ‹åˆ°æ¶ˆæ¯ä¸¢å¼ƒ: %zu æ¡", droppedCount);
             }
         }
     }
@@ -294,76 +294,76 @@ void stressTest() {
     ZLOG_FLUSH();
     std::this_thread::sleep_for(std::chrono::milliseconds(300));
 
-    // Êä³öÑ¹Á¦²âÊÔ½á¹û
-    ZINFOF("Ñ¹Á¦²âÊÔÍê³É - ×Ü¶ªÆú: %zu, ×îÖÕ¶ÓÁÐ: %zu",
+    // è¾“å‡ºåŽ‹åŠ›æµ‹è¯•ç»“æžœ
+    ZINFOF("åŽ‹åŠ›æµ‹è¯•å®Œæˆ - æ€»ä¸¢å¼ƒ: %zu, æœ€ç»ˆé˜Ÿåˆ—: %zu",
         ZLOG_GET_DROPPED_COUNT(), ZLOG_GET_QUEUE_SIZE());
 
-    // »Ö¸´Ô­Ê¼»º´æ´óÐ¡
+    // æ¢å¤åŽŸå§‹ç¼“å­˜å¤§å°
     ZLOG_SET_MAX_CACHE_SIZE(originalCache);
 
-    std::cout << "Ñ¹Á¦²âÊÔÍê³É" << std::endl;
+    std::cout << "åŽ‹åŠ›æµ‹è¯•å®Œæˆ" << std::endl;
 }
 
 //==============================================================================
-// Ö÷º¯Êý
+// ä¸»å‡½æ•°
 //==============================================================================
 
 int main() {
     try {
         std::cout << "========================================" << std::endl;
-        std::cout << "       ZLogging ÐÔÄÜ²âÊÔ³ÌÐò" << std::endl;
+        std::cout << "       ZLogging æ€§èƒ½æµ‹è¯•ç¨‹åº" << std::endl;
         std::cout << "========================================" << std::endl;
 
-        // ³õÊ¼»¯ÅäÖÃ
+        // åˆå§‹åŒ–é…ç½®
         ZLOG_INIT();
         ZLOG_SET_PROGRAM_NAME("demo");
         ZLOG_SET_OUTPUT_DIR("./zlog");
         ZLOG_SET_MIN_LEVEL(DEBUG);
-        ZLOG_SET_MAX_CACHE_SIZE(3000);  // ÊÊÖÐµÄ»º´æ´óÐ¡
-        ZLOG_SET_MAX_BUFFER_SIZE(32 * 1024);  // 32KB»º³åÇø
+        ZLOG_SET_MAX_CACHE_SIZE(3000);  // é€‚ä¸­çš„ç¼“å­˜å¤§å°
+        ZLOG_SET_MAX_BUFFER_SIZE(32 * 1024);  // 32KBç¼“å†²åŒº
         ZLOG_SET_OUTPUT_MODE(ZLOG_DEFAULT_MODE, false, "");
-        ZLOG_SET_FILE_MODE(ALWAYS_OPEN);  // ×î¼ÑÐÔÄÜ
+        ZLOG_SET_FILE_MODE(ALWAYS_OPEN);  // æœ€ä½³æ€§èƒ½
 
-        ZINFO() << "ÐÔÄÜ²âÊÔ¿ªÊ¼";
-        ZINFOF("²âÊÔÅäÖÃ - »ù´¡²âÊÔ: %dÌõ, Ïß³ÌÊý: %d, Ã¿Ïß³Ì: %dÌõ",
+        ZINFO() << "æ€§èƒ½æµ‹è¯•å¼€å§‹";
+        ZINFOF("æµ‹è¯•é…ç½® - åŸºç¡€æµ‹è¯•: %dæ¡, çº¿ç¨‹æ•°: %d, æ¯çº¿ç¨‹: %dæ¡",
             BASIC_TEST_COUNT, THREAD_COUNT, PER_THREAD_COUNT);
 
-        // ÕûÌå²âÊÔ¼ÆÊ±
-        ZLOG_TIMER("ÐÔÄÜ²âÊÔ×ÜÌåÊ±¼ä");
+        // æ•´ä½“æµ‹è¯•è®¡æ—¶
+        ZLOG_TIMER("æ€§èƒ½æµ‹è¯•æ€»ä½“æ—¶é—´");
 
-        // Ö´ÐÐ¸÷Ïî²âÊÔ
+        // æ‰§è¡Œå„é¡¹æµ‹è¯•
         basicPerformanceTest();
         outputModePerformanceTest();
         multiThreadPerformanceTest();
         complexScenarioTest();
         stressTest();
 
-        // Êä³ö×îÖÕÍ³¼Æ
+        // è¾“å‡ºæœ€ç»ˆç»Ÿè®¡
         std::cout << "\n========================================" << std::endl;
-        std::cout << "              ²âÊÔÍ³¼Æ½á¹û" << std::endl;
+        std::cout << "              æµ‹è¯•ç»Ÿè®¡ç»“æžœ" << std::endl;
         std::cout << "========================================" << std::endl;
 
-        ZINFOF("×ÜÈÕÖ¾ÌõÊý: %zu", ZLOG_GET_TOTAL_COUNT());
-        ZINFOF("¸÷¼¶±ðÍ³¼Æ:");
-        ZINFOF("  DEBUG: %zu Ìõ", ZLOG_GET_LEVEL_COUNT(DEBUG));
-        ZINFOF("  INFO: %zu Ìõ", ZLOG_GET_LEVEL_COUNT(INFO));
-        ZINFOF("  WARNING: %zu Ìõ", ZLOG_GET_LEVEL_COUNT(WARNING));
-        ZINFOF("  ERROR: %zu Ìõ", ZLOG_GET_LEVEL_COUNT(ERROR));
-        ZINFOF("µ±Ç°¶ÓÁÐ´óÐ¡: %zu", ZLOG_GET_QUEUE_SIZE());
-        ZINFOF("×Ü¶ªÆúÏûÏ¢Êý: %zu", ZLOG_GET_DROPPED_COUNT());
+        ZINFOF("æ€»æ—¥å¿—æ¡æ•°: %zu", ZLOG_GET_TOTAL_COUNT());
+        ZINFOF("å„çº§åˆ«ç»Ÿè®¡:");
+        ZINFOF("  DEBUG: %zu æ¡", ZLOG_GET_LEVEL_COUNT(DEBUG));
+        ZINFOF("  INFO: %zu æ¡", ZLOG_GET_LEVEL_COUNT(INFO));
+        ZINFOF("  WARNING: %zu æ¡", ZLOG_GET_LEVEL_COUNT(WARNING));
+        ZINFOF("  ERROR: %zu æ¡", ZLOG_GET_LEVEL_COUNT(ERROR));
+        ZINFOF("å½“å‰é˜Ÿåˆ—å¤§å°: %zu", ZLOG_GET_QUEUE_SIZE());
+        ZINFOF("æ€»ä¸¢å¼ƒæ¶ˆæ¯æ•°: %zu", ZLOG_GET_DROPPED_COUNT());
 
-        ZINFO() << "ËùÓÐÐÔÄÜ²âÊÔÍê³É£¡";
+        ZINFO() << "æ‰€æœ‰æ€§èƒ½æµ‹è¯•å®Œæˆï¼";
 
-        std::cout << "\nÏêÏ¸ÐÔÄÜÊý¾ÝÇë²é¿´¿ØÖÆÌ¨Êä³öÖÐµÄ¼ÆÊ±½á¹û" << std::endl;
-        std::cout << "ÈÕÖ¾ÎÄ¼þ±£´æÔÚ: ./perf_logs Ä¿Â¼" << std::endl;
+        std::cout << "\nè¯¦ç»†æ€§èƒ½æ•°æ®è¯·æŸ¥çœ‹æŽ§åˆ¶å°è¾“å‡ºä¸­çš„è®¡æ—¶ç»“æžœ" << std::endl;
+        std::cout << "æ—¥å¿—æ–‡ä»¶ä¿å­˜åœ¨: ./perf_logs ç›®å½•" << std::endl;
 
-        // °²È«¹Ø±Õ
+        // å®‰å…¨å…³é—­
         ZLOG_SHUTDOWN(5000);
 
     }
     catch (const std::exception& e) {
-        std::cerr << "²âÊÔ³ÌÐòÒì³£: " << e.what() << std::endl;
-        ZFATAL() << "³ÌÐòÒì³£: " << e.what();
+        std::cerr << "æµ‹è¯•ç¨‹åºå¼‚å¸¸: " << e.what() << std::endl;
+        ZFATAL() << "ç¨‹åºå¼‚å¸¸: " << e.what();
         ZLOG_SHUTDOWN(1000);
         return 1;
     }

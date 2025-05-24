@@ -1,6 +1,14 @@
+### 作者 
+DaXiaoZi
+
+### 克隆项目
+
+```bash
+git clone git@gitee.com:stone-master/zlogging.git
+
 # ZLogging 使用文档
 
-一个高性能的异步C++日志系统，支持多种输出模式、日志轮转、性能监控等企业级功能。
+一个异步C++日志系统，支持多种输出模式、日志轮转、性能监控等功能
 
 ## 快速开始
 
@@ -51,8 +59,8 @@ ZLOG_INIT();                                    // 初始化（必需）
 ZLOG_SET_PROGRAM_NAME("MyApp");                 // 程序名
 ZLOG_SET_OUTPUT_DIR("./logs");                  // 输出目录
 ZLOG_SET_MIN_LEVEL(INFO);                       // 最小日志级别
-ZLOG_SET_MAX_LOG_SIZE(50 * 1024 * 1024);      // 单文件最大50MB
-ZLOG_SET_MAX_CACHE_SIZE(1000);                // 最大缓存1000条
+ZLOG_SET_MAX_LOG_SIZE(50 * 1024 * 1024);        // 单文件最大50MB
+ZLOG_SET_MAX_CACHE_SIZE(1000);                  // 最大缓存1000条
 ```
 
 ### 输出模式配置
@@ -65,8 +73,8 @@ ZLOG_SET_OUTPUT_MODE(ZLOG_COLORED_CONSOLE, false, "");  // 彩色控制台
 ZLOG_SET_OUTPUT_MODE(ZLOG_DEFAULT_MODE, false, "");     // 控制台+文件+彩色
 
 // 文件输出模式
-ZLOG_SET_OUTPUT_MODE(ZLOG_DEFAULT_MODE, false, "");           // 多文件：每级别独立
-ZLOG_SET_OUTPUT_MODE(ZLOG_DEFAULT_MODE, true, "app.log");     // 单文件：自定义名称
+ZLOG_SET_OUTPUT_MODE(ZLOG_DEFAULT_MODE, false, "");             // 多文件：每级别独立
+ZLOG_SET_OUTPUT_MODE(ZLOG_DEFAULT_MODE, true, "app.log");       // 单文件：自定义名称
 ZLOG_SET_OUTPUT_MODE(ZLOG_DEFAULT_MODE, true, zlog::ZLOG_INFO); // 单文件：使用INFO级别文件
 ```
 
