@@ -4,8 +4,8 @@ DaXiaoZi
 ### 克隆项目
 
 ```bash
-git clone https://gitee.com/stone-master/zlogging.git
-git clone https://github.com/daxiaozi999/zlogging.git
+git clone https://gitee.com/stone-master/zlog.git
+git clone https://github.com/daxiaozi999/zlog.git
 
 # ZLogging 使用文档
 
