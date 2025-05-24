@@ -11,8 +11,6 @@ git clone https://github.com/daxiaozi999/zlog.git
 
 一个异步C++日志系统，支持多种输出模式、日志轮转、性能监控等功能
 
-## 快速开始
-
 ### 基础使用三步骤
 
 ```cpp
